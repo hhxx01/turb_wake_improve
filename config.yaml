@@ -1,4 +1,6 @@
 data:
-  raw_path_new: 'F:/data\scada/huadian_radar_realdata'
-  raw_path_old: 'F:/data\scada/data_old'
+  raw_path_new: 'F:/data/scada/huadian_radar_realdata'
+  raw_path_old: 'F:/data/scada/data_old'
+  splited_data_old: 'F:/data/scada/data_old/result_splited'
+  splited_data_new: 'F:/data/scada/huadian_radar_realdata/result_min'
 

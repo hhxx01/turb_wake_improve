@@ -35,14 +35,14 @@ def split_data_by_month(file_path, file_name):
 # 现有数据合并 秒级数据--分钟级，各个机组数据拆分
 def load_now_data(file_path, file_name):
     full_path = os.path.join(file_path, file_name)
-    data = pd.read_csv(full_path, usecols=[0, 43, 45, 47, 48, 50])
+    data = pd.read_csv(full_path, usecols=[0, 43, 44, 45, 47, 48, 50])
     data.set_index(data.columns[0], inplace=True)
     data.index.name = 'timestamp' # 转索引
     data.index = pd.to_datetime(data.index) # 转时间格式
-    # print(data.head())
+    print('loaded', file_name)
     return data
 
-def split_now_data_minute(file_path, data):
+def split_now_data_minute(file_path, data, save_path):
     # 选取data每一分钟的数据，根据num列平均并重排
     grouped = data.groupby(['num', pd.Grouper(freq='1min')]).mean() # 根据机组id和分钟级时间重新分组后进行平均
     # 使用 unstack(level=0) 将 'num' 这一层索引转到“列”上
@@ -51,7 +51,7 @@ def split_now_data_minute(file_path, data):
     wide_df.columns = [f"{num}_{col}" for num, col in wide_df.columns] # 重命名列，加上机组名
     wide_df.index.name = 'timestamp'
     month_str = data.index[0].strftime('%Y-%m')
-    save_path = os.path.join(file_path,'result_min', f"{month_str}.csv")
+    save_path = os.path.join(save_path, f"{month_str}.csv")
     file_exists = os.path.isfile(save_path)
     wide_df.to_csv(save_path, mode='a', header=not file_exists, encoding='utf-8-sig')
 
@@ -70,7 +70,7 @@ def split_now_data_second(file_path, data):
 with open('config.yaml', 'r') as file:
     config = yaml.safe_load(file)
 
-split_data_by_month(config['data']['raw_path_old'], '历史数据.csv')
+# split_data_by_month(config['data']['raw_path_old'], '历史数据.csv')
 
 all_entries = os.listdir(config['data']['raw_path_new'])
 date_pattern = re.compile(r'^\d{4}-\d{2}-\d{2}\.csv$') # 正则匹配
@@ -85,6 +85,6 @@ daily_files.sort()
 
 for file_name in daily_files:
     data = load_now_data(config['data']['raw_path_new'], file_name)
-    split_now_data_minute(config['data']['raw_path_new'], data)
-    split_now_data_second(config['data']['raw_path_new'], data)
+    split_now_data_minute(config['data']['raw_path_new'], data, config['data']['splited_data_new'])
+    # split_now_data_second(config['data']['raw_path_new'], data)
 
