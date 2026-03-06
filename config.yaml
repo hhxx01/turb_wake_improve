@@ -3,4 +3,8 @@ data:
   raw_path_old: 'F:/data/scada/data_old'
   splited_data_old: 'F:/data/scada/data_old/result_splited'
   splited_data_new: 'F:/data/scada/huadian_radar_realdata/result_min'
+  rou_corr_data_old: 'F:/data/scada/data_old/rou_corr_data_old'
+  rou_corr_data_new: 'F:/data/scada/huadian_radar_realdata/rou_corr_data_new'
+  classify_data_old: 'F:/data/scada/data_old/ws_wd_opt_old'
+  classify_data_new: 'F:/data/scada/huadian_radar_realdata/ws_wd_opt_new'
 
